@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import ListGroup from "'react-bootstrap/ListGroup";
+import { ListGroup } from "react-bootstrap";
 
 //Components
 import MovieItem from "./MovieItem";
@@ -9,11 +9,16 @@ import MovieItem from "./MovieItem";
 import movieStore from "../stores/MovieStore";
 
 const WatchList = () => {
+  const [query, setQuery] = useState("");
+  const [movie, setMovie] = useState({ title: "" });
+
   const watchList = movieStore.movies.map((movie) => (
     <MovieItem movie={movie} key={movie.id} />
   ));
 
-  const [movie, setMovie] = useState({ title: "" });
+  const watchedList = movieStore.watchedmovies.map((movie) => (
+    <MovieItem movie={movie} key={movie.id} />
+  ));
 
   const handleChange = (event) => {
     const newMovie = { ...movie, [event.target.title]: event.target.value };
@@ -39,7 +44,8 @@ const WatchList = () => {
           />
         </div>
       </form>{" "}
-      <ListGroup>{watchList}</ListGroup>
+      <ListGroup>unWatched{watchList}</ListGroup>
+      <ListGroup>Watched{watchedList}</ListGroup>
     </div>
   );
 };
