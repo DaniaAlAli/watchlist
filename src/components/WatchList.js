@@ -1,51 +1,107 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { ListGroup } from "react-bootstrap";
 
 //Components
 import MovieItem from "./MovieItem";
+import SearchBar from "./SearchBar";
+
+//Style
+import { ListStyled, AddMovieStyled, AddButton } from "../styles";
 
 //Store
 import movieStore from "../stores/MovieStore";
 
 const WatchList = () => {
   const [query, setQuery] = useState("");
-  const [movie, setMovie] = useState({ title: "" });
+  const [queryWatched, setQueryWatched] = useState("");
+  const [movieName, setMovieName] = useState("");
 
-  const watchList = movieStore.movies.map((movie) => (
-    <MovieItem movie={movie} key={movie.id} />
-  ));
+  const watchList = movieStore.movies
+    .filter(
+      (movie) =>
+        movie.title.toLowerCase().includes(query.toLowerCase()) &&
+        movie.click === false
+    )
+    .map((movie) => <MovieItem movie={movie} key={movie.id} />);
 
-  const watchedList = movieStore.watchedmovies.map((movie) => (
-    <MovieItem movie={movie} key={movie.id} />
-  ));
+  const watchedList = movieStore.movies
+    .filter(
+      (movie) =>
+        movie.title.toLowerCase().includes(queryWatched.toLowerCase()) &&
+        movie.click === true
+    )
+    .map((movie) => <MovieItem movie={movie} key={movie.id} />);
 
   const handleChange = (event) => {
-    const newMovie = { ...movie, [event.target.title]: event.target.value };
-    setMovie(newMovie);
+    setMovieName(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    movieStore.createMovie(movie);
+    movieStore.createMovie(movieName);
+    setMovieName("");
+  };
+
+  const checkIfEmpty = (list) => {
+    if (list.length <= 0) return <p>No Movies</p>;
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Movie</label>
-          <input
-            title="title"
-            type="text"
-            onChange={handleChange}
-            className="form-control"
-            value={movie.name}
-          />
+      <AddMovieStyled>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label
+              style={{
+                color: "red",
+                fontSize: "30px",
+                fontFamily: "Wallpoet, cursive",
+              }}
+            >
+              Add a New Movie
+            </label>
+            <input
+              title="title"
+              type="text"
+              onChange={handleChange}
+              className="form-control"
+              value={movieName}
+              defaultValue="Reset"
+            />{" "}
+            <AddButton>Add</AddButton>
+          </div>
+        </form>
+      </AddMovieStyled>
+      <div className="row">
+        <div className="col-6">
+          <SearchBar setQuery={setQuery} />
+          <ListStyled>
+            <span>WatchList - {watchList.length} </span>
+            {watchList}
+            <span
+              style={{
+                color: "white",
+              }}
+            >
+              {checkIfEmpty(watchList)}
+            </span>{" "}
+          </ListStyled>
         </div>
-      </form>{" "}
-      <ListGroup>unWatched{watchList}</ListGroup>
-      <ListGroup>Watched{watchedList}</ListGroup>
+        <div className="col-6">
+          <SearchBar setQuery={setQueryWatched} />
+          <ListStyled>
+            <span>Watched - {watchedList.length}</span>
+            {watchedList}{" "}
+            <span
+              style={{
+                color: "white",
+              }}
+            >
+              {checkIfEmpty(watchedList)}
+            </span>{" "}
+          </ListStyled>
+        </div>
+      </div>
     </div>
   );
 };

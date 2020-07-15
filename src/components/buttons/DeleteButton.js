@@ -6,8 +6,8 @@ import { DeleteButtonStyled } from "../../styles";
 //Store
 import movieStore from "../../stores/MovieStore";
 
-const DeleteButton = ({ movieID }) => {
-  const handleDelete = () => movieStore.deleteCollection(movieID);
+const DeleteButton = ({ movieId }) => {
+  const handleDelete = () => movieStore.deleteCollection(movieId);
   return <DeleteButtonStyled onClick={handleDelete}>Delete</DeleteButtonStyled>;
 };
 

@@ -1,14 +1,20 @@
 import React from "react";
-import ListGroupItem from "react-bootstrap/ListGroupItem";
+
+//Style
+import { ListGroupItemStyled } from "../styles";
 
 //Component
 import DeleteButton from "./buttons/DeleteButton";
+import StatusButton from "./buttons/StatusButton";
 
 const MovieItem = ({ movie }) => {
   return (
     <>
-      <ListGroupItem>{movie.title}</ListGroupItem>
-      <DeleteButton movieId={movie.id} />
+      <ListGroupItemStyled>
+        - {movie.title}
+        <DeleteButton movieId={movie.id} />{" "}
+        <StatusButton movie={movie}> </StatusButton>
+      </ListGroupItemStyled>
     </>
   );
 };
