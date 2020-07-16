@@ -20,7 +20,7 @@ const MovieItem = ({ movie }) => {
     <>
       <ListGroupItemStyled>
         <imageStyled onClick={showImage}>
-          <span style={{ fontSize: "80%" }}>🎬</span>{" "}
+          <span style={{ fontSize: "80%" }}>{"🎬"}</span>{" "}
           {currentTheme === `${movie.title}` ? (
             <img
               style={{ width: "130px", height: "160px", borderRadius: "20px" }}
