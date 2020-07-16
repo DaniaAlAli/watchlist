@@ -6,13 +6,8 @@ import movies from "../movies";
 class MovieStore {
   movies = movies;
 
-  createMovie = (movieName) => {
-    const newMovie = {
-      id: this.movies[this.movies.length - 1].id + 1,
-      click: false,
-      title: movieName,
-    };
-
+  createMovie = (newMovie) => {
+    newMovie.id = this.movies[this.movies.length - 1].id + 1;
     this.movies.push(newMovie);
   };
 

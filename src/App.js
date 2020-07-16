@@ -1,6 +1,8 @@
 import React from "react";
-
 import { GlobalStyle } from "./styles";
+
+//Data
+import movies from "./movies";
 
 //components
 import WatchList from "./components/WatchList";
@@ -9,7 +11,8 @@ function App() {
   return (
     <div>
       <GlobalStyle />
-      <WatchList />
+
+      <WatchList movies={movies} />
     </div>
   );
 }

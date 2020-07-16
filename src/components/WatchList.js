@@ -14,7 +14,6 @@ import movieStore from "../stores/MovieStore";
 const WatchList = () => {
   const [query, setQuery] = useState("");
   const [queryWatched, setQueryWatched] = useState("");
-  const [movieName, setMovieName] = useState("");
 
   const watchList = movieStore.movies
     .filter(
@@ -32,14 +31,25 @@ const WatchList = () => {
     )
     .map((movie) => <MovieItem movie={movie} key={movie.id} />);
 
+  const [movie, setMovie] = useState({
+    title: "",
+    poster: "",
+    click: false,
+  });
+
   const handleChange = (event) => {
-    setMovieName(event.target.value);
+    const newMovie = { ...movie, [event.target.name]: event.target.value };
+    setMovie(newMovie);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    movieStore.createMovie(movieName);
-    setMovieName("");
+    movieStore.createMovie(movie);
+    setMovie({
+      title: "",
+      poster: "",
+      click: false,
+    });
   };
 
   const checkIfEmpty = (list) => {
@@ -53,7 +63,7 @@ const WatchList = () => {
           <div>
             <label
               style={{
-                color: "red",
+                color: "green",
                 fontSize: "30px",
                 fontFamily: "Wallpoet, cursive",
               }}
@@ -61,12 +71,28 @@ const WatchList = () => {
               Add a New Movie
             </label>
             <input
-              title="title"
+              name="title"
               type="text"
               onChange={handleChange}
               className="form-control"
-              value={movieName}
-              defaultValue="Reset"
+              value={movie.title}
+              placeholder="Movie's Name 🎥.."
+            />{" "}
+            <label
+              style={{
+                color: "green",
+                fontSize: "30px",
+                fontFamily: "Wallpoet, cursive",
+              }}
+            >
+              Image
+            </label>
+            <input
+              name="poster"
+              onChange={handleChange}
+              className="form-control"
+              value={movie.poster}
+              placeholder="Movie's URL 🎥.."
             />{" "}
             <AddButton>Add</AddButton>
           </div>
@@ -75,12 +101,22 @@ const WatchList = () => {
       <div className="row">
         <div className="col-6">
           <SearchBar setQuery={setQuery} />
-          <ListStyled>
-            <span>WatchList - {watchList.length} </span>
+          <ListStyled className="mx-5">
+            <span>
+              WatchList -{" "}
+              <span
+                style={{
+                  color: "white",
+                }}
+              >
+                {watchList.length}
+              </span>{" "}
+            </span>
             {watchList}
             <span
               style={{
                 color: "white",
+                fontSize: "25px",
               }}
             >
               {checkIfEmpty(watchList)}
@@ -89,12 +125,22 @@ const WatchList = () => {
         </div>
         <div className="col-6">
           <SearchBar setQuery={setQueryWatched} />
-          <ListStyled>
-            <span>Watched - {watchedList.length}</span>
+          <ListStyled className="mx-5">
+            <span>
+              Watched -{" "}
+              <span
+                style={{
+                  color: "white",
+                }}
+              >
+                {watchedList.length}
+              </span>
+            </span>
             {watchedList}{" "}
             <span
               style={{
                 color: "white",
+                fontSize: "25px",
               }}
             >
               {checkIfEmpty(watchedList)}
